@@ -11,7 +11,7 @@ items = [['curry rice','steak','fruit','BBQ','beef noodle', 'hotpot', 'bread', '
 
 random.seed(2)
 
-data_num = 50
+data_num = 20
 with open('data.csv', 'w', newline='') as csvfile:
     for _ in range(data_num): 
         name = names[random.randint(0,len(names))-1]
