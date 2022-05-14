@@ -16,7 +16,7 @@ typedef struct account
     struct account *priorperson; //??´ç?????ä¾?
 }account;
 //for test
-//helloooo
+//helloooo00000000
 account *head = NULL;
 void add_node(account *);
 void text_input(void);
@@ -43,8 +43,14 @@ void test_PRINT(void){
         root = root->nextperson;
     }
 }
+//hahahahahaha
+<<<<<<< HEAD
 //1325456465
 //54566551231324656
+=======
+
+
+>>>>>>> 158c68fb4c77c33fdf16483a93cc5b08d9cca9f3
 void slice(char* strLine, char* delimiter){
     account *newnode = (account*)malloc(sizeof(account));
     char *token = strtok(strLine, delimiter);
