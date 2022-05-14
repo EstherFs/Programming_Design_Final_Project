@@ -10,10 +10,10 @@ typedef struct account
     int price;
     char class[100];
     char item[100];
-    struct account *next; //橫的過去
-    struct account *prior; //橫的回來
-    struct account *nextperson; //直的過去
-    struct account *priorperson; //直的回來
+    struct account *next; //橫�????????
+    struct account *prior; //橫�?????�?
+    struct account *nextperson; //??��????????
+    struct account *priorperson; //??��?????�?
 }account;
 
 account *head = NULL;
@@ -42,7 +42,7 @@ void test_PRINT(void){
         root = root->nextperson;
     }
 }
-
+//1325456465
 
 void slice(char* strLine, char* delimiter){
     account *newnode = (account*)malloc(sizeof(account));
