@@ -44,13 +44,8 @@ void test_PRINT(void){
     }
 }
 //hahahahahaha
-<<<<<<< HEAD
 //1325456465
 //54566551231324656
-=======
-
-
->>>>>>> 158c68fb4c77c33fdf16483a93cc5b08d9cca9f3
 void slice(char* strLine, char* delimiter){
     account *newnode = (account*)malloc(sizeof(account));
     char *token = strtok(strLine, delimiter);
