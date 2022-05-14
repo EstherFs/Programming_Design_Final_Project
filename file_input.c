@@ -4,7 +4,7 @@
 #include<ctype.h>
 typedef struct account
 {
-    char name[100];      
+    char name[100];
     int month;
     int day;
     int price;
@@ -15,7 +15,7 @@ typedef struct account
     struct account *nextperson; //直的過去
     struct account *priorperson; //直的回來
 }account;
-
+//for test
 account *head = NULL;
 void add_node(account *);
 void text_input(void);
@@ -66,7 +66,7 @@ void slice(char* strLine, char* delimiter){
             for(;isdigit(token[itr]);itr++){
             	d *=10;
             	d +=(token[itr]-'0');
-                
+
             }
             newnode -> month = m;
             newnode -> day = d;
@@ -85,7 +85,7 @@ void text_input(void){
     FILE *fp;
     fp = fopen("data.csv", "r");
     char strLine[1500];
-    while (fgets(strLine, 1500, fp)){ 
+    while (fgets(strLine, 1500, fp)){
         slice(strLine, ",");
     }
     fclose(fp);
