@@ -16,7 +16,7 @@ typedef struct account
     struct account *priorperson; //直的回來
 }account;
 //for test
-//helloooo
+//helloooo00000
 account *head = NULL;
 void add_node(account *);
 void text_input(void);
