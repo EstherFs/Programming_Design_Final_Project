@@ -7,6 +7,7 @@
 #include<iostream>
 
 account *head = NULL;
+int person_num = 0;
 
 void add_node(account *);
 void text_input(void);
@@ -15,6 +16,8 @@ void test_PRINT(void);
 void insert(void);
 void delete_choice(void);
 int delete_node(char *DeleteName, int month, int day, int price, char *classes, char *item, char choice);
+account** statistics();
+
 std::vector<account *> search(char* name, int month, int day, char* classes);
 
 void test_PRINT(void) {
@@ -76,6 +79,10 @@ void slice(char *strLine, char delimiter) {
     newnode->prior = NULL;
     newnode->nextperson = NULL;
     newnode->priorperson = NULL;
+    newnode->sum = 0;
+    newnode->pay = 0;
+    newnode->last_pay=0;
+    newnode->exceed = 0;
     add_node(newnode);
 }
 
@@ -144,6 +151,10 @@ void insert_node(char* name, char* classes, char* item, int price, int month, in
     newnode->prior = NULL;
     newnode->nextperson = NULL;
     newnode->priorperson = NULL;
+    newnode->sum = 0;
+    newnode->pay = 0;
+    newnode->last_pay=0;
+    newnode->exceed = 0;
     add_node(newnode);
 }
 void add_node(account *newnode) {
@@ -366,4 +377,55 @@ std::vector<account *> search(char* name, int month, int day, char* classes){
     }
 
     return searcher;
+}
+
+int cmp(const void *a ,const void *b){
+    account *A = (*(account**)a);
+    account *B = (*(account**)b);
+    return A->sum - B->sum;
+}
+
+account** statistics(){
+    account *tmp = head;
+    while(tmp!=NULL){
+        account *tmp2 = tmp;
+        while(tmp2!=NULL){
+            tmp->sum += tmp2->price;
+            tmp2 = tmp2->next;
+        }
+        person_num++;
+        tmp = tmp->nextperson;
+    }
+    if(person_num==0)
+        return NULL;
+
+    account **all_person = (account**)malloc(sizeof(account*)*person_num);
+    tmp = head ;
+    int i = 0, avg = 0;
+    while(tmp!=NULL){
+        all_person[i++] = tmp;
+        avg += tmp->sum;
+        tmp = tmp->nextperson;
+    }
+    avg /= person_num;
+
+    qsort(all_person, person_num, sizeof(account*), cmp);
+
+    for(int i=0;i<person_num-1;i++){
+        int diff = avg - all_person[i]->sum;
+        all_person[i]->exceed = diff%(person_num-i-1);
+        all_person[i]->pay = diff/(person_num-i-1);
+
+        for(int j=i+1;j<person_num;j++){
+            all_person[j]->sum -= all_person[i]->pay;
+            all_person[i]->sum += all_person[i]->pay;
+        }
+    }
+    for(int i=person_num-2;i>=0;i--){
+        all_person[person_num-1]->sum -= all_person[i]->exceed;
+        all_person[i]->last_pay = all_person[i]->exceed + all_person[i]->pay;
+        all_person[i]->sum  = avg;
+    }
+    return all_person;
+
 }

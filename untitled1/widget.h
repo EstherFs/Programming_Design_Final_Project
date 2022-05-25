@@ -2,6 +2,11 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QTableWidgetItem>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QMediaPlaylist>
+#include <QMediaPlayer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -42,6 +47,10 @@ private slots:
     void on_pushButton_10_clicked();
 
     void on_pushButton_12_clicked();
+
+    void on_pushButton_13_clicked();
+
+    void on_pushButton_14_clicked();
 
 private:
     Ui::Widget *ui;

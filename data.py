@@ -9,7 +9,7 @@ items = [['curry rice','steak','fruit','BBQ','beef noodle', 'hotpot', 'bread', '
         ['hotel', 'amusement park', 'museum', 'concert', 'theater', 'gallery', 'KTV', 'zoo', 'aquarium'],
         ['tent', 'flashlight', 'sleeping bag', 'gas stove', 'ice cooler', 'fishing pole', 'hammock', 'canteen']]
 
-random.seed(2)
+random.seed(3)
 
 data_num = 20
 with open('data.csv', 'w', newline='') as csvfile:

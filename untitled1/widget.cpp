@@ -1,15 +1,11 @@
 #include "widget.h"
 #include "./ui_widget.h"
-#include <QTableWidgetItem>
-#include <QMediaPlaylist>
-#include <QMediaPlayer>
 #include <struction.h>
-#include <QFileDialog>
-#include <QMessageBox>
 #include <windows.h>
 
 
 extern account *head;
+extern int person_num;
 QString dir = "C:/";
 
 QMediaPlaylist *playlist = new QMediaPlaylist();
@@ -301,7 +297,10 @@ void Widget::on_pushButton_12_clicked() //delete person
         QMessageBox::warning(this,tr("Delete Error"), tr("Can't find the person"),QMessageBox::Ok);
     }
 }
-
+#include<iostream>
+//void Widget::on_pushButton_13_clicked(){
+//
+//}
 
 
 void Widget::on_pushButton_2_clicked() //search
@@ -342,6 +341,49 @@ void Widget::on_pushButton_3_clicked()
 }
 
 
+void Widget::on_pushButton_13_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(4); //Statistic
+
+    QTableWidget *table = ui->tableWidget_3;
+
+    account **all_person = statistics(); //call statistic function and return to all_person array
+
+    QStringList vHeader, hHeader;
+    table->setRowCount(0); //clean
+    for(int i=0;i<person_num;i++){
+        vHeader<<all_person[i]->name; //push_back all the name
+        hHeader<<all_person[i]->name;
+    }
+
+    /*build the table*/
+    table->setRowCount(person_num);
+    table->setColumnCount(person_num);
+    table->setHorizontalHeaderLabels(hHeader);
+    table->setVerticalHeaderLabels(vHeader);
+    for(int i=0;i<person_num;i++){ //i:row ,j:column
+        table->setColumnWidth(i,70);
+        for(int j=0;j<=i;j++){
+            table->setItem(i, j, new Items(QString::number(0))); //no need to pay for people ahead of that person
+        }
+        for(int j=i+1;j < person_num-1;j++){
+            table->setItem(i, j, new Items(QString::number(all_person[i]->pay))); //pay for others
+        }
+        table->setItem(i, person_num-1, new Items(QString::number(all_person[i]->last_pay))); //pay for last_person
+    }
+
+    int total_sum = 0;
+    for(int i=0; i<person_num; i++){
+        total_sum += all_person[i]->sum;
+    }
+    ui->label_15->setText(QString::number(total_sum));
+    ui->label_17->setText(QString::number(total_sum/person_num));
+
+}
 
 
+void Widget::on_pushButton_14_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0); //statistic back
+}
 
