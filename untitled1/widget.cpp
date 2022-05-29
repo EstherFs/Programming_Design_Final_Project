@@ -1,18 +1,17 @@
 #include "widget.h"
 #include "./ui_widget.h"
 #include <struction.h>
-#include <windows.h>
-
 
 extern account *head;
 extern int person_num;
 extern int exceed;
-extern char exceed_name[20];
+extern char exceed_name[100];
+extern int searcher_size;
 
-QMediaPlaylist *playlist = new QMediaPlaylist();
-QMediaPlayer *background_music = new QMediaPlayer();
-QMediaPlayer *cash_music = new QMediaPlayer();
-
+QString background_path = QDir::temp().relativeFilePath("./background.wav");//a path in the temporary folder
+int noMean = QFile::copy(":/sound_effect/background.wav", background_path);//Will return true if copied, false if the target already exists
+QString cash_path = QDir::temp().relativeFilePath("./cash.wav");//a path in the temporary folder
+int noMean2 = QFile::copy(":/sound_effect/cash.wav", cash_path);//Will return true if copied, false if the target already exists
 
 class Items: public QTableWidgetItem
 {
@@ -51,16 +50,8 @@ Widget::Widget(QWidget *parent): QWidget(parent), ui(new Ui::Widget)
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
-    background_music->setMedia(QUrl("qrc:/sound_effect/background_music.mp3"));
-    cash_music->setMedia(QUrl("qrc:/sound_effect/cash.mp3"));
-    background_music->play();
 
-    connect(background_music, &QMediaPlayer::stateChanged, [&](QMediaPlayer::State state) {
-            if (state == QMediaPlayer::State::StoppedState)
-            {
-                background_music->play();
-            }
-        });
+    PlaySound((wchar_t*)background_path.utf16(), NULL, SND_ASYNC|SND_LOOP);
 
     ui->tableWidget->setColumnWidth(0,85);
     ui->tableWidget->setColumnWidth(1,115);
@@ -73,6 +64,12 @@ Widget::Widget(QWidget *parent): QWidget(parent), ui(new Ui::Widget)
     ui->tableWidget_2->setColumnWidth(2,115);
     ui->tableWidget_2->setColumnWidth(3,60);
     ui->tableWidget_2->setColumnWidth(4,55);
+
+    ui->tableWidget_3->setColumnWidth(0,85);
+    ui->tableWidget_3->setColumnWidth(1,115);
+    ui->tableWidget_3->setColumnWidth(2,115);
+    ui->tableWidget_3->setColumnWidth(3,60);
+    ui->tableWidget_3->setColumnWidth(4,55);
 }
 
 
@@ -103,7 +100,6 @@ void Widget::TableWidgetDisplay()
             table->setItem(i,4,new Items(date));
             i++;
             cur = cur->next;
-
         }
         root = root->nextperson;
     }
@@ -115,19 +111,13 @@ void Widget::TableWidgetDisplay()
 void Widget::on_pushButton_clicked()//import
 {
     QString file = "";
-    file = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                      "",
-                                      tr("CSV files (*.csv)"));
+    file = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("CSV files (*.csv)"));
     if(file=="")
         return;
 
-    int status = text_input(file.toLocal8Bit().data());
+    int status = import_(file.toLocal8Bit().data());
     if(status==1)
     {
-        background_music->stop();
-        cash_music->play();
-        background_music->play();
-
         QMessageBox msgBox;
         msgBox.setText("Success Import!! Your import file is: \n"+file);
         msgBox.setWindowTitle("Success Import");
@@ -135,6 +125,10 @@ void Widget::on_pushButton_clicked()//import
         msgBox.exec();
 
         TableWidgetDisplay();
+
+        PlaySound((wchar_t*)cash_path.utf16(), NULL, SND_SYNC);
+        PlaySound((wchar_t*)background_path.utf16(), NULL, SND_ASYNC|SND_LOOP);
+
     }
     else if(status==-1)
     {
@@ -147,13 +141,12 @@ void Widget::on_pushButton_clicked()//import
 void Widget::on_pushButton_5_clicked() //export
 {
     QString file = "";
-    file = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                       "./data.csv",
-                                       tr("CSV files (*.csv)"));
+    file = QFileDialog::getSaveFileName(this, tr("Save File"), "./data.csv", tr("CSV files (*.csv)"));
+
     if(file=="")
         return;
 
-    text_output(file.toLocal8Bit().data());
+    export_(file.toLocal8Bit().data());
     QMessageBox msgBox;
     msgBox.setText("Success Export!! Your export path is: \n"+file);
     msgBox.setWindowTitle("Success Export");
@@ -165,11 +158,11 @@ void Widget::on_pushButton_5_clicked() //export
 void Widget::on_toolButton_clicked() //set background
 {
     QString image = "";
-    image = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                            image,
-                                            tr("Images (*.png *.xpm *.jpg)"));
+    image = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Images (*.png *.xpm *.jpg)"));
+
     if(image=="")
         return;
+
     QPixmap bkgnd(image);
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
@@ -180,26 +173,27 @@ void Widget::on_toolButton_clicked() //set background
 
 void Widget::on_pushButton_6_clicked() //search data
 {
-    QString name="",classs="",date="";
+    QString name="",classs="",date="",item="";
     int month=0,day=0;
     name = ui->lineEdit->text();
     classs = ui->lineEdit_2->text();
     date = ui->lineEdit_3->text();
     int idx = date.indexOf('/');
-    if(idx!=-1){
+    if(idx!=-1)
+    {
         month = date.mid(0,idx).toInt();
         day = date.mid(idx+1,date.size()-idx-1).toInt();
     }
-    std::vector<account*> searcher = search(name.toLocal8Bit().data(), month, day, classs.toLocal8Bit().data());
+    account** searcher = search(name.toLocal8Bit().data(), month, day, classs.toLocal8Bit().data(), item.toLocal8Bit().data(), 0);
 
-    if(searcher.empty()){
+    if(searcher_size==0){
         QMessageBox::warning(this,tr("Search Error"), tr("Can't find the selected data"),QMessageBox::Ok);
         return;
     }
 
     QTableWidget *table = ui->tableWidget_2;
     table->setRowCount(0);
-    for(int i=0;i<(int)searcher.size();i++){
+    for(int i=0;i<searcher_size;i++){
         table->insertRow(i);
         table->setItem(i,0,new QTableWidgetItem(searcher[i]->name));
         table->setItem(i,1,new QTableWidgetItem(searcher[i]->classes));
@@ -210,8 +204,25 @@ void Widget::on_pushButton_6_clicked() //search data
         table->setItem(i,4,new Items(date2));
     }
 
+    free(searcher);
 }
 
+bool check_exist(QString name,QString classes,QString item, int month, int day, int price){
+    account* head_copy = head;
+    while (head_copy != NULL) {
+        account *person = head_copy;
+        while (person != NULL) {
+            if(strcmp(person->name, name.toLocal8Bit().data())==0 && person->price == price &&
+               strcmp(person->item, item.toLocal8Bit().data())==0 && person->month == month &&
+               strcmp(person->classes, classes.toLocal8Bit().data())==0 && person->day == day){
+                return true;
+            }
+            person = person->next;
+        }
+        head_copy = head_copy->nextperson;
+    }
+    return false;
+}
 
 void Widget::on_pushButton_9_clicked() //insert
 {
@@ -238,22 +249,34 @@ void Widget::on_pushButton_9_clicked() //insert
         QMessageBox::warning(this,tr("Insert Error"), tr("Please fill the price correctly"),QMessageBox::Ok);
     }
     else{
-        background_music->stop();
-        cash_music->play();
-        background_music->play();
+        QMessageBox::StandardButton reply;
+        if(check_exist(name, classes, item, month, day, price)==true){
+            reply = QMessageBox::question(this, "Insert Warn", "The data have already existed, do you still want to insert?",
+                                           QMessageBox::Yes|QMessageBox::No);
+            if(reply == QMessageBox::No)
+                return;
+        }
+
         QMessageBox msgBox;
         msgBox.setText("Inserted sucessesfully!!");
         msgBox.setWindowTitle("Inserted Sucessesfully");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.exec();
 
-        insert_node(name.toLocal8Bit().data(), classes.toLocal8Bit().data(), item.toLocal8Bit().data(), price, month, day);
+        insert(name.toLocal8Bit().data(), classes.toLocal8Bit().data(), item.toLocal8Bit().data(), price, month, day);
         TableWidgetDisplay();
 
+        ui->lineEdit_4->setText("");
+        ui->lineEdit_5->setText("");
+        ui->lineEdit_6->setText("");
+        ui->lineEdit_7->setText("");
+        ui->lineEdit_8->setText("");
+
+        PlaySound((wchar_t*)cash_path.utf16(), NULL, SND_SYNC);
+        PlaySound((wchar_t*)background_path.utf16(), NULL, SND_ASYNC|SND_LOOP);
+
     }
-
 }
-
 
 void Widget::on_pushButton_10_clicked() //delete account
 {
@@ -278,6 +301,13 @@ void Widget::on_pushButton_10_clicked() //delete account
         msgBox.exec();
 
         TableWidgetDisplay();
+
+        ui->lineEdit_9->setText("");
+        ui->lineEdit_10->setText("");
+        ui->lineEdit_11->setText("");
+        ui->lineEdit_12->setText("");
+        ui->lineEdit_13->setText("");
+        ui->tableWidget_3->setRowCount(0);
     }
     else if(status==-1){
         QMessageBox::warning(this,tr("Delete Error"), tr("Can't find the account"),QMessageBox::Ok);
@@ -310,6 +340,13 @@ void Widget::on_pushButton_12_clicked() //delete person
         msgBox.exec();
 
         TableWidgetDisplay();
+
+        ui->lineEdit_9->setText("");
+        ui->lineEdit_10->setText("");
+        ui->lineEdit_11->setText("");
+        ui->lineEdit_12->setText("");
+        ui->lineEdit_13->setText("");
+        ui->tableWidget_3->setRowCount(0);
     }
     else if(status==-1){
         QMessageBox::warning(this,tr("Delete Error"), tr("Can't find the person"),QMessageBox::Ok);
@@ -326,12 +363,21 @@ void Widget::on_pushButton_2_clicked() //go to search
 void Widget::on_pushButton_7_clicked() //search back
 {
     ui->stackedWidget->setCurrentIndex(0);
+    ui->lineEdit->setText("");
+    ui->lineEdit_2->setText("");
+    ui->lineEdit_3->setText("");
+    ui->tableWidget_2->setRowCount(0);
 }
 
 
 void Widget::on_pushButton_8_clicked() // insert back
 {
     ui->stackedWidget->setCurrentIndex(0);
+    ui->lineEdit_4->setText("");
+    ui->lineEdit_5->setText("");
+    ui->lineEdit_6->setText("");
+    ui->lineEdit_7->setText("");
+    ui->lineEdit_8->setText("");
 }
 
 
@@ -344,6 +390,12 @@ void Widget::on_pushButton_4_clicked() // go to insert
 void Widget::on_pushButton_11_clicked() // delete back
 {
     ui->stackedWidget->setCurrentIndex(0);
+    ui->lineEdit_9->setText("");
+    ui->lineEdit_10->setText("");
+    ui->lineEdit_11->setText("");
+    ui->lineEdit_12->setText("");
+    ui->lineEdit_13->setText("");
+    ui->tableWidget_3->setRowCount(0);
 }
 
 
@@ -389,12 +441,16 @@ void Widget::on_pushButton_13_clicked() //got to statistic
     QString Qexceed_name(exceed_name);
     ui->label_15->setText(QString::number(total_sum));
     ui->label_17->setText(QString::number(total_avg));
-    ui->label_19->setText(Qexceed_name + " ($" + QString::number(exceed) +")");
+    if(Qexceed_name!="                    ")
+        ui->label_19->setText(Qexceed_name + " ($" + QString::number(exceed) +")");
+
+    free(all_person);
 }
 
 void Widget::on_pushButton_14_clicked() //statistic back
 {
     ui->stackedWidget->setCurrentIndex(0);
+
 }
 
 
@@ -404,5 +460,66 @@ void Widget::on_checkBox_stateChanged(int arg1) //hide table
         ui->tableWidget->setVisible(false);
     else
         ui->tableWidget->setVisible(true);
+}
+
+void Widget::search_for_delete(){
+    QString name="",classes="",item="",date="";
+    int month=0, day=0, price=0;
+    name = ui->lineEdit_9->text();
+    classes = ui->lineEdit_10->text();
+    item = ui->lineEdit_11->text();
+    price = ui->lineEdit_12->text().toInt();
+    date = ui->lineEdit_13->text();
+    int idx = date.indexOf('/');
+    if(idx!=-1){
+        month = date.mid(0,idx).toInt();
+        day = date.mid(idx+1,date.size()-idx-1).toInt();
+    }
+    account** searcher = search(name.toLocal8Bit().data(), month, day, classes.toLocal8Bit().data(), item.toLocal8Bit().data(), price);
+
+    QTableWidget *table = ui->tableWidget_3;
+    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    table->setRowCount(0);
+    for(int i=0;i<searcher_size;i++){
+        table->insertRow(i);
+        table->setItem(i,0,new QTableWidgetItem(searcher[i]->name));
+        table->setItem(i,1,new QTableWidgetItem(searcher[i]->classes));
+        table->setItem(i,2,new QTableWidgetItem(searcher[i]->item));
+        table->setItem(i,3,new Items(QString::number(searcher[i]->price)));
+        QString date2;
+        date2 = (QString::number(searcher[i]->month)+'/'+QString::number(searcher[i]->day));
+        table->setItem(i,4,new Items(date2));
+    }
+
+    free(searcher);
+}
+
+void Widget::on_lineEdit_9_editingFinished() //delete name
+{
+    search_for_delete();
+}
+
+
+void Widget::on_lineEdit_10_editingFinished()//delete class
+{
+    search_for_delete();
+}
+
+
+void Widget::on_lineEdit_11_editingFinished()//delete item
+{
+    search_for_delete();
+}
+
+
+void Widget::on_lineEdit_12_editingFinished()//delete price
+{
+    search_for_delete();
+}
+
+
+void Widget::on_lineEdit_13_editingFinished()//delete date
+{
+    search_for_delete();
 }
 
