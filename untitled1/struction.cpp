@@ -8,6 +8,8 @@
 
 account *head = NULL;
 int person_num = 0;
+int exceed = 0 ;
+char exceed_name[20] = {};
 
 void add_node(account *);
 void text_input(void);
@@ -80,15 +82,14 @@ void slice(char *strLine, char delimiter) {
     newnode->nextperson = NULL;
     newnode->priorperson = NULL;
     newnode->sum = 0;
-    newnode->pay = 0;
-    newnode->last_pay=0;
-    newnode->exceed = 0;
+    for(int i=0;i<100;i++)
+        newnode->payTo[i] = 0;
     add_node(newnode);
 }
 
-void text_output(char *dir) {
+void text_output(char *file) {
     FILE *fp;
-    fp = fopen(strcat(dir,"/data.csv"), "w");
+    fp = fopen(file, "w");
     account *root = head;
     char strLine[1500];
     while (root != NULL) {
@@ -114,9 +115,9 @@ void text_output(char *dir) {
     fclose(fp);
 }
 
-int text_input(char *dir) {
+int text_input(char *file) {
     FILE *fp;
-    fp = fopen(strcat(dir,"/data.csv"), "r");
+    fp = fopen(file, "r");
     if(fp==NULL){
         return -1;
     }
@@ -137,7 +138,6 @@ void insert(void) {
 
 void insert_node(char* name, char* classes, char* item, int price, int month, int day){
     account *newnode = (account *)malloc(sizeof(account));
-    std::cout<<name;
     newnode->name[0] = '\0';
     newnode->classes[0] = '\0';
     newnode->item[0] = '\0';
@@ -152,13 +152,12 @@ void insert_node(char* name, char* classes, char* item, int price, int month, in
     newnode->nextperson = NULL;
     newnode->priorperson = NULL;
     newnode->sum = 0;
-    newnode->pay = 0;
-    newnode->last_pay=0;
-    newnode->exceed = 0;
+    for(int i=0;i<100;i++)
+        newnode->payTo[i] = 0;
     add_node(newnode);
 }
-void add_node(account *newnode) {
 
+void add_node(account *newnode) {
         if (head == NULL)
             head = newnode;
         else {
@@ -177,8 +176,6 @@ void add_node(account *newnode) {
             previous->nextperson = newnode;
             previous->nextperson->priorperson = previous;
         }
-
-
 }
 
 /*刪除選項*/
@@ -386,46 +383,70 @@ int cmp(const void *a ,const void *b){
 }
 
 account** statistics(){
-    account *tmp = head;
-    while(tmp!=NULL){
-        account *tmp2 = tmp;
-        while(tmp2!=NULL){
-            tmp->sum += tmp2->price;
-            tmp2 = tmp2->next;
+    account *head_copy = head;
+    person_num = 0;
+    exceed = 0;
+    for(int i =0;i<20;i++)
+        exceed_name[i] = ' ';
+
+    while(head_copy!=NULL){
+        head_copy->sum = 0;
+        account *head_copy2 = head_copy;
+        while(head_copy2!=NULL){
+            head_copy->sum += head_copy2->price;
+            head_copy2 = head_copy2->next;
         }
         person_num++;
-        tmp = tmp->nextperson;
+        head_copy = head_copy->nextperson;
     }
     if(person_num==0)
         return NULL;
 
     account **all_person = (account**)malloc(sizeof(account*)*person_num);
-    tmp = head ;
+    head_copy = head ;
     int i = 0, avg = 0;
-    while(tmp!=NULL){
-        all_person[i++] = tmp;
-        avg += tmp->sum;
-        tmp = tmp->nextperson;
+    while(head_copy!=NULL){
+        all_person[i++] = head_copy;
+        avg += head_copy->sum;
+        head_copy = head_copy->nextperson;
     }
     avg /= person_num;
 
     qsort(all_person, person_num, sizeof(account*), cmp);
 
-    for(int i=0;i<person_num-1;i++){
-        int diff = avg - all_person[i]->sum;
-        all_person[i]->exceed = diff%(person_num-i-1);
-        all_person[i]->pay = diff/(person_num-i-1);
+//    for(int i=0;i<person_num;i++)
+//        qDebug()<<all_person[i]->name<<" "<<all_person[i]->sum<<"\n";
 
-        for(int j=i+1;j<person_num;j++){
-            all_person[j]->sum -= all_person[i]->pay;
-            all_person[i]->sum += all_person[i]->pay;
+    for(int i=0,j=person_num-1;i<j;){
+        int diff = avg - all_person[i]->sum;
+        int need = all_person[j]->sum - avg;
+
+        if(need<=diff){
+             all_person[j]->sum = avg;
+             all_person[i]->sum += need;
+             all_person[i]->payTo[j] = need;
+             j--;
+        }
+        else{
+            all_person[j]->sum -= diff;
+            all_person[i]->sum = avg;
+            all_person[i]->payTo[j] = diff;
+            i++;
         }
     }
-    for(int i=person_num-2;i>=0;i--){
-        all_person[person_num-1]->sum -= all_person[i]->exceed;
-        all_person[i]->last_pay = all_person[i]->exceed + all_person[i]->pay;
-        all_person[i]->sum  = avg;
-    }
-    return all_person;
 
+    for(int i=0;i<person_num;i++){
+        if(all_person[i]->sum != avg){
+            exceed = all_person[i]->sum - avg;
+            strcpy(exceed_name, all_person[i]->name);
+        }
+
+    }
+
+//    qDebug()<<"--------------\n";
+//    for(int i=0;i<person_num;i++)
+//        qDebug()<<all_person[i]->name<<" "<<all_person[i]->sum<<"\n";
+
+    return all_person;
 }
+

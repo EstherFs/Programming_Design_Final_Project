@@ -9,9 +9,7 @@ typedef struct account {
     char classes[100];
     char item[100];
     int sum; //個人總花費
-    int pay; //欲付其他人
-    int last_pay; //欲付給最後一個人
-    int exceed; // last_pay=pay+exceed
+    int payTo[100]; //欲付其他人
     struct account *next;         //橫的過去
     struct account *prior;        //橫的回來
     struct account *nextperson;   //直的過去

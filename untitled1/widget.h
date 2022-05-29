@@ -29,7 +29,6 @@ private slots:
 
     void on_pushButton_6_clicked();
 
-
     void on_pushButton_2_clicked();
 
     void on_pushButton_7_clicked();
@@ -51,6 +50,8 @@ private slots:
     void on_pushButton_13_clicked();
 
     void on_pushButton_14_clicked();
+
+    void on_checkBox_stateChanged(int arg1);
 
 private:
     Ui::Widget *ui;
