@@ -132,7 +132,7 @@ void Widget::on_pushButton_clicked()//import
     }
     else if(status==-1)
     {
-        QMessageBox::warning(this,tr("Import Error"), tr("Can't find the import file"),QMessageBox::Ok);
+        QMessageBox::about(this,tr("Import Error"), tr("Can't find the import file"));
     }
 
 }
@@ -187,7 +187,7 @@ void Widget::on_pushButton_6_clicked() //search data
     account** searcher = search(name.toLocal8Bit().data(), month, day, classs.toLocal8Bit().data(), item.toLocal8Bit().data(), 0);
 
     if(searcher_size==0){
-        QMessageBox::warning(this,tr("Search Error"), tr("Can't find the selected data"),QMessageBox::Ok);
+        QMessageBox::about(this,tr("Search Error"), tr("Can't find the selected data"));
         return;
     }
 
@@ -240,13 +240,13 @@ void Widget::on_pushButton_9_clicked() //insert
         day = date.mid(idx+1,date.size()-idx-1).toInt();
     }
     if(name=="" || classes=="" || item=="" || date=="" ){
-        QMessageBox::warning(this,tr("Insert Error"), tr("Please fill out all entrys"),QMessageBox::Ok);
+        QMessageBox::about(this,tr("Insert Error"), tr("Please fill out all entrys"));
     }
     else if(month<=0||day<=0||month>12||day>31||(month==2&&day>29)||((month==4||month==6||month==9||month==11)&&day>30)){
-        QMessageBox::warning(this,tr("Insert Error"), tr("Please fill the date correctly"),QMessageBox::Ok);
+        QMessageBox::about(this,tr("Insert Error"), tr("Please fill the date correctly"));
     }
     else if(price<=0){
-        QMessageBox::warning(this,tr("Insert Error"), tr("Please fill the price correctly"),QMessageBox::Ok);
+        QMessageBox::about(this,tr("Insert Error"), tr("Please fill the price correctly"));
     }
     else{
         QMessageBox::StandardButton reply;
@@ -310,7 +310,7 @@ void Widget::on_pushButton_10_clicked() //delete account
         ui->tableWidget_3->setRowCount(0);
     }
     else if(status==-1){
-        QMessageBox::warning(this,tr("Delete Error"), tr("Can't find the account"),QMessageBox::Ok);
+        QMessageBox::about(this,tr("Delete Error"), tr("Can't find the account"));
     }
 }
 
@@ -349,7 +349,7 @@ void Widget::on_pushButton_12_clicked() //delete person
         ui->tableWidget_3->setRowCount(0);
     }
     else if(status==-1){
-        QMessageBox::warning(this,tr("Delete Error"), tr("Can't find the person"),QMessageBox::Ok);
+        QMessageBox::about(this,tr("Delete Error"), tr("Can't find the person"));
     }
 }
 

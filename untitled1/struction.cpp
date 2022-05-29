@@ -1,12 +1,11 @@
 #include <struction.h>
-#include <qDebug>
 
 account *head = NULL;
 int person_num = 0;
 int total_num = 0;
 int exceed = 0 ;
 char exceed_name[100];
-int searcher_size =0;
+int searcher_size = 0;
 
 void add_node(account *);
 void import_(void);
@@ -222,7 +221,7 @@ account ** search(char* name, int month, int day, char* classes, char* item, int
 
     account** searcher = (account**)malloc(sizeof(account*)*total_num);
     searcher_size = 0;
-    qDebug() << "name";
+
     //Search by name(default name："")
     if(strcmp(name,"")!=0){
         account *ptr1, *ptr2;
@@ -231,10 +230,8 @@ account ** search(char* name, int month, int day, char* classes, char* item, int
             if(strcmp(ptr1->name, name) == 0){
                 //Put all the accounts of the name into the vector searcher.
                 for (ptr2 = ptr1; ptr2 != NULL; ptr2 = ptr2->next){
-                    qDebug() << ptr2;
                     searcher[searcher_size++] =  ptr2;
                 }
-                qDebug() << "OK";
                 break;
             }
         }
