@@ -456,10 +456,8 @@ void sortedPrice(account* newnode)
 	if (sortPrice == NULL || sortPrice->price >= newnode->price) {
 		newnode->next = sortPrice;
 		sortPrice = newnode;
-        printf("進來1\n");
 	}
 	else {
-        printf("進來2\n");
 		account* current = sortPrice;
 		
 		while (current->next != NULL
@@ -468,7 +466,6 @@ void sortedPrice(account* newnode)
 		}
 		newnode->next = current->next;
 		current->next = newnode;
-        printf("進來3\n");
 	}
 }
 
@@ -477,13 +474,9 @@ void insertionPrice(void)
 	account* current = sortHead;
 
 	while (current != NULL) {
-        printf("1\n");
 		account* next = current->next;
-        printf("2\n");
 		sortedPrice(current);
-        printf("3\n");
 		current = next;
-        printf("4\n");
 	}
 	sortHead = sortPrice;
 }
