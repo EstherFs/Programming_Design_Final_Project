@@ -1,6 +1,11 @@
 #ifndef STRUCTION_H
 #define STRUCTION_H
 #include "widget.h"
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct account {
     char name[100];
     int month;
@@ -17,14 +22,11 @@ typedef struct account {
 } account;
 
 void add_node(account *);
-int text_input(char *);
-void text_output(char *);
-void test_PRINT(void);
-void insert(void);
-void delete_choice(void);
+int import_(char *);
+void export_(char *);
+void insert(char*, char*, char*, int, int, int);
 int delete_node(char *, int , int, int , char *, char *, char );
-void insert_node(char*, char* , char*, int, int, int);
-std::vector<account *> search(char*, int , int, char* );
-account** statistics();
+account **search(char*, int, int, char*, char*, int);
+account **statistics(void);
 
 #endif // STRUCTION_H

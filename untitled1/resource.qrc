@@ -1,7 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>sound_effect/background_music.mp3</file>
-        <file>sound_effect/cash.mp3</file>
         <file>img/rsz_background.jpg</file>
+        <file>sound_effect/cash.wav</file>
+        <file>sound_effect/background.wav</file>
+        <file>img/icon.png</file>
     </qresource>
 </RCC>

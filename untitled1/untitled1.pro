@@ -1,5 +1,3 @@
-QT       += core gui
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -22,9 +20,8 @@ FORMS += \
     widget.ui
 
 QT += core gui
-QT += multimedia
-QT += multimediawidgets
-QT += winextras
+
+LIBS += -lwinmm
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

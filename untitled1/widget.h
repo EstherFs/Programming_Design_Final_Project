@@ -5,8 +5,8 @@
 #include <QTableWidgetItem>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QMediaPlaylist>
-#include <QMediaPlayer>
+#include <windows.h>
+#include <mmsystem.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -52,6 +52,18 @@ private slots:
     void on_pushButton_14_clicked();
 
     void on_checkBox_stateChanged(int arg1);
+
+    void search_for_delete();
+
+    void on_lineEdit_9_editingFinished();
+
+    void on_lineEdit_10_editingFinished();
+
+    void on_lineEdit_11_editingFinished();
+
+    void on_lineEdit_12_editingFinished();
+
+    void on_lineEdit_13_editingFinished();
 
 private:
     Ui::Widget *ui;
