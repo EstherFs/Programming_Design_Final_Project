@@ -121,3 +121,5 @@ void add_node(account *newnode){
         current->nextperson->priorperson = current;
     }
 }
+
+void traverse()

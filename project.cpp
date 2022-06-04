@@ -17,16 +17,21 @@ typedef struct account {
 } account;
 
 account *head = NULL;
+account *sortHead = NULL;
+account *sortPrice = NULL;
+account *sortName = NULL;
+account *sortDate = NULL;
+
 void add_node(account *);
 int check(account *);
 void text_input(void);
 void text_output(void);
 void test_PRINT(void);
-<<<<<<< HEAD
 void traverse(void);
-=======
-void slice(char *StrLine, char *delimiter, int n);
->>>>>>> 076ca0782bc8869902da2d046ba54a923820a5f3
+void sortLink(void);
+void sortedPrice(account* newnode);
+void insertionPrice(void);
+void sort_traverse(void);
 void insert(void);
 void delete_choice(void);
 void delete_node(char *, int, int, int, char *, char *, char);
@@ -39,10 +44,16 @@ int main(void) {
     // insert();
     // insert();
     int cmd;
-    printf("Please inter the command (1:Delete 2:Traverse 4:End): ");
+    printf("Please inter the command (1:Delete 2:Traverse 3:Sort 4:End): ");
     while(scanf("%d",&cmd)!=4){
         if(cmd==1) delete_choice();
         if(cmd==2) traverse();
+        if(cmd==3) 
+        {
+            sortLink();
+            insertionPrice();
+            sort_traverse();
+        }
         if (cmd < 1 ||cmd>4){
             printf("\033[031mERROR!!Can't execute the command.\033[m\n");
             printf("\033[032mPlease enter the cmd again.\033[m\n");
@@ -196,7 +207,10 @@ void insert(void) {
 /*將新增帳目加入linked list*/
 void add_node(account *NewNode) {
     if (head == NULL)
+    {
         head = NewNode;
+        sortHead = head;
+    }
     else {
         account *current = head, *previous = NULL;
         while (current != NULL) {
@@ -351,7 +365,6 @@ void delete_node(char *DeleteName, int month, int day, int price, char *classes,
 }
 
 void traverse(void) {
-<<<<<<< HEAD
     account *cur, *curPerson;
     printf("\n");
     for (curPerson = head; curPerson != NULL; curPerson = curPerson->NextPerson) {
@@ -362,13 +375,6 @@ void traverse(void) {
                 printf("  ->  ");
         }
         printf("\n\n");
-=======
-    account *cur, *curperson;
-    for (curperson = head; curperson != NULL; curperson = curperson->NextPerson) {
-        for (cur = curperson; cur != NULL; cur = cur->next) {
-            printf("%s %s %s %d %d ",cur->name, cur->classes, cur->item, cur->month, cur->day, cur-> price);
-        }
->>>>>>> 076ca0782bc8869902da2d046ba54a923820a5f3
     }
 }
 
@@ -428,4 +434,66 @@ int check(account *NewNode)
         }
     }
   return flag;
+}
+
+void sortLink(void)
+{
+    account* current = head;
+    account* currentlink = head;
+    while(currentlink -> NextPerson != NULL)
+    {
+        while(current -> next != NULL)
+            current = current -> next;
+        current -> next = currentlink -> NextPerson;
+        current = current -> next;
+        currentlink = currentlink -> NextPerson;
+    }
+}
+
+void sortedPrice(account* newnode)
+{
+    //printf("近來\n");
+	if (sortPrice == NULL || sortPrice->price >= newnode->price) {
+		newnode->next = sortPrice;
+		sortPrice = newnode;
+        printf("進來1\n");
+	}
+	else {
+        printf("進來2\n");
+		account* current = sortPrice;
+		
+		while (current->next != NULL
+			&& current->next->price < newnode->price) {
+			current = current->next;
+		}
+		newnode->next = current->next;
+		current->next = newnode;
+        printf("進來3\n");
+	}
+}
+
+void insertionPrice(void)
+{
+	account* current = sortHead;
+
+	while (current != NULL) {
+        printf("1\n");
+		account* next = current->next;
+        printf("2\n");
+		sortedPrice(current);
+        printf("3\n");
+		current = next;
+        printf("4\n");
+	}
+	sortHead = sortPrice;
+}
+
+void sort_traverse(void)
+{
+    account* current = sortHead;
+    while(current != NULL)
+    {
+        printf("%s %s %s %d/%d %d\n", current -> name, current -> classes, current -> item, current -> month, current -> day, current -> price);
+        current = current -> next;
+    }
 }
