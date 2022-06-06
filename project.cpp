@@ -10,10 +10,10 @@ typedef struct account {
     int price;
     char classes[100];
     char item[100];
-    struct account *next;         //¾î¦V
-    struct account *prior;        //¾î¦V
-    struct account *NextPerson;   //ª½¦V
-    struct account *PriorPerson;  //ª½¦V
+    struct account *next;         //ï¿½ï¿½V
+    struct account *prior;        //ï¿½ï¿½V
+    struct account *NextPerson;   //ï¿½ï¿½ï¿½V
+    struct account *PriorPerson;  //ï¿½ï¿½ï¿½V
 } account;
 
 account *head = NULL;
@@ -105,7 +105,7 @@ int main(void) {
     printf("SYSTEM OFF\n");
     text_output();
 
-    /*´ú¸Õsearch*/
+    /*ï¿½ï¿½ï¿½ï¿½search*/
     // char name[15];
     // char classes[15];
     // std::vector<account *> v;
@@ -144,7 +144,7 @@ void test_PRINT(void) {
     }
 }
 
-/*±NStrLine¤Á³Î¥X©Ò»ÝªºÅÜ¼Æ©ñ¶iNewNode*/
+/*ï¿½NStrLineï¿½ï¿½ï¿½Î¥Xï¿½Ò»Ýªï¿½ï¿½Ü¼Æ©ï¿½iNewNode*/
 void slice(char *StrLine, char *delimiter, int n) {
     account *NewNode = (account *)malloc(sizeof(account));
     char *token = strtok(StrLine, delimiter);
@@ -162,7 +162,7 @@ void slice(char *StrLine, char *delimiter, int n) {
         else if (i == 4) {
             int m = 0;
             int itr = 0;
-            //¤À³Î¥X¤ë¥÷©M¤é
+            //ï¿½ï¿½ï¿½Î¥Xï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½
             for (; token[itr] != '/'; itr++) {
                 m *= 10;
                 m += (token[itr] - '0');
@@ -201,10 +201,10 @@ void slice(char *StrLine, char *delimiter, int n) {
 void text_output(void) {
     FILE *fp;
     fp = fopen("data_output.csv", "w");
-    account *root = head; //root°O¿ý¤H
+    account *root = head; //rootï¿½Oï¿½ï¿½ï¿½H
     char StrLine[1500];
     while (root != NULL) {
-        account *person = root; //person°O¿ý¬Y¤@¤Hªº¤£¦Pµ§±b¥Ø
+        account *person = root; //personï¿½Oï¿½ï¿½ï¿½Yï¿½@ï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½bï¿½ï¿½
         while (person != NULL) {
             char tmp[100];
             strcpy(StrLine, person->name);
@@ -229,7 +229,7 @@ void text_output(void) {
 /*File_Input*/
 void text_input(void) {
     FILE *fp;
-    fp = fopen("data.csv", "r"); //±Ndata.csvÅª¶iµ{¦¡
+    fp = fopen("data.csv", "r"); //ï¿½Ndata.csvÅªï¿½iï¿½{ï¿½ï¿½
     char StrLine[1500];
     while (fgets(StrLine, 1500, fp)) {
         slice(StrLine, ",", 1);
@@ -237,7 +237,7 @@ void text_input(void) {
     fclose(fp);
 }
 
-/*¨Ï¥ÎªÌ¤â°Ê¿é¤J±b¥Ø*/
+/*ï¿½Ï¥ÎªÌ¤ï¿½Ê¿ï¿½Jï¿½bï¿½ï¿½*/
 void insert(void) {
     char StrLine[1500];
     fgets(StrLine, 1500, stdin);
@@ -245,7 +245,7 @@ void insert(void) {
     return;
 }
 
-/*±N·s¼W±b¥Ø¥[¤Jlinked list*/
+/*ï¿½Nï¿½sï¿½Wï¿½bï¿½Ø¥[ï¿½Jlinked list*/
 void add_node(account *NewNode) {
     if (head == NULL)
     {
@@ -270,14 +270,14 @@ void add_node(account *NewNode) {
     }
 }
 
-/*§R°£¿ï¶µ*/
+/*ï¿½Rï¿½ï¿½ï¿½ï¶µ*/
 void delete_choice(void) {
-    char choice;            //¿ï¶µ
-    char DeleteName[100];   //­n§Rªº¦W¦r
+    char choice;            //ï¿½ï¶µ
+    char DeleteName[100];   //ï¿½nï¿½Rï¿½ï¿½ï¿½Wï¿½r
     int price = 0, month, day;
     char classes[100];    
     char item[100];
-    /*¿é¤J§R°£¿ï¶µ(1§R¾ã­Ó±b¤á/2§R¬Y­Ó±b¤á)*/
+    /*ï¿½ï¿½Jï¿½Rï¿½ï¿½ï¿½ï¶µ(1ï¿½Rï¿½ï¿½Ó±bï¿½ï¿½/2ï¿½Rï¿½Yï¿½Ó±bï¿½ï¿½)*/
     do {  
         printf("Please enter your choice.\n");
         printf("1.remove someone's whole account\n");
@@ -291,38 +291,38 @@ void delete_choice(void) {
         delete_node(DeleteName, month, day, price, classes, item, choice);
         return;
     } else if (choice == '2') {   
-        /*¥ý½T»{¦³¨S¦³§ä¨ì¤H¡A¨S¦³´NÄ~Äò¿é¤J¨ì¦³*/
+        /*ï¿½ï¿½ï¿½Tï¿½{ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½Hï¿½Aï¿½Sï¿½ï¿½ï¿½Nï¿½~ï¿½ï¿½ï¿½Jï¿½ì¦³*/
         while (1) {
-            int find = 0;       //ªì©l¬O¨S§ä¨ì¤H
+            int find = 0;       //ï¿½ï¿½lï¿½Oï¿½Sï¿½ï¿½ï¿½H
             account *cur;
             for (cur = head; cur != NULL; cur = cur->NextPerson) {
                 if (strcmp(cur->name, DeleteName) == 0) {                  
-                    find = 1;   //§ä¨ì¤H
+                    find = 1;   //ï¿½ï¿½ï¿½H
                     break;
                 }
             }
             if (find == 0) {
-                printf("\033[031mERROR!!Can't find the person.\033[m\n");  //¿ù»~°T®§
+                printf("\033[031mERROR!!Can't find the person.\033[m\n");  //ï¿½ï¿½ï¿½~ï¿½Tï¿½ï¿½
                 printf("\033[032mPlease enter the name you want to delete again.\033[m\n");
                 scanf("%s", DeleteName);
             } else {
-                break;  //§ä¨ì¤H¸õ¥Xwhile
+                break;  //ï¿½ï¿½ï¿½Hï¿½ï¿½ï¿½Xwhile
             }
         }
 
         int flag = 0;
         account *cur, *ptr;
-        /*¦pªG¦¹¤é´Á¨S®ø¶O¡AÄ~Äò¿é¨ì¦³­n§RÃþ§O«~¶µªº¥¿½T¤é´Á*/
+        /*ï¿½pï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½Oï¿½Aï¿½~ï¿½ï¿½ï¿½ì¦³ï¿½nï¿½Rï¿½ï¿½ï¿½Oï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½ï¿½ï¿½*/
         do {
             printf("\nPlease enter the date you want to delete.\n");
-            printf("\033[032mFormat: month/day\033[m\n");    //¥ý¿é¤J¤é´Á
+            printf("\033[032mFormat: month/day\033[m\n");    //ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½
             scanf("%d/%d", &month, &day);
             printf("\nThe consumption you spent on %d/%d\n", month, day);
-            printf("class\titem\tdollar\n");  //¦L¥X¦¹¤é´Á¤U¦³ªºÃþ§O/«~¶µ/ª÷ÃB____¥i¥H¦Ò¼{­n¤£­nÅÜÃC¦â??
+            printf("class\titem\tdollar\n");  //ï¿½Lï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½O/ï¿½~ï¿½ï¿½/ï¿½ï¿½ï¿½B____ï¿½iï¿½Hï¿½Ò¼{ï¿½nï¿½ï¿½ï¿½nï¿½ï¿½ï¿½Cï¿½ï¿½??
             for (cur = head; cur != NULL; cur = cur->NextPerson) {
                 if (strcmp(cur->name, DeleteName) == 0) {
                     for (ptr = cur; ptr != NULL; ptr = ptr->next) {
-                        if ((ptr->month == month) && (ptr->day == day)) {  //¦³§ä¨ìªºÃþ§O/«~¶µ/ª÷ÃB
+                        if ((ptr->month == month) && (ptr->day == day)) {  //ï¿½ï¿½ï¿½ï¿½ìªºï¿½ï¿½ï¿½O/ï¿½~ï¿½ï¿½/ï¿½ï¿½ï¿½B
                             printf("%s\t%s\t%d\n", ptr->classes, ptr->item, ptr->price);
                             flag = 1;
                         }
@@ -330,7 +330,7 @@ void delete_choice(void) {
                 }
             }
             if (flag == 0) {
-                printf("\033[031mERROR!!Can't find the consumption of %s on %d/%d.\033[m\n", DeleteName, month, day);  //¿ù»~°T®§
+                printf("\033[031mERROR!!Can't find the consumption of %s on %d/%d.\033[m\n", DeleteName, month, day);  //ï¿½ï¿½ï¿½~ï¿½Tï¿½ï¿½
                 printf("\033[032mPlease enter again.\033[m\n");
             }
         } while (flag == 0);  
@@ -344,13 +344,13 @@ void delete_choice(void) {
     }
 }
 
-/*¶i¦æ§R°£ªº°Ê§@*/
+/*ï¿½iï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½Ê§@*/
 void delete_node(char *DeleteName, int month, int day, int price, char *classes, char *item, char choice) {
     struct account *cur, *prev, *p, *ptr;
-    /*1.§R±¼¾ã­Ó±b¤á*/
+    /*1.ï¿½Rï¿½ï¿½ï¿½ï¿½Ó±bï¿½ï¿½*/
     if (choice == '1') { 
         for (cur = head; cur != NULL; cur = cur->NextPerson) {
-            if (strcmp(cur->name, DeleteName) == 0) {  //¦³§ä¨ì¤H
+            if (strcmp(cur->name, DeleteName) == 0) {  //ï¿½ï¿½ï¿½ï¿½ï¿½H
                 if (cur == head) {
                     head = cur->NextPerson;
                 } else {
@@ -359,7 +359,7 @@ void delete_node(char *DeleteName, int month, int day, int price, char *classes,
                         cur->NextPerson->PriorPerson = cur->PriorPerson;
                     }
                 }
-                //free³o­Ó¤Hcur«ü¨ìªº±b¥Ø¤Î±µ¦b¤§«áªº©Ò¦³±b¥Ø
+                //freeï¿½oï¿½Ó¤Hcurï¿½ï¿½ï¿½ìªºï¿½bï¿½Ø¤Î±ï¿½ï¿½bï¿½ï¿½ï¿½áªºï¿½Ò¦ï¿½ï¿½bï¿½ï¿½
                 p = cur; 
                 while (p != NULL) {
                     account *del = p;
@@ -369,9 +369,9 @@ void delete_node(char *DeleteName, int month, int day, int price, char *classes,
                 return;
             }
         }
-        printf("\033[031mERROR!!Can't find the person.\033[m\n");  //¿ù»~°T®§
+        printf("\033[031mERROR!!Can't find the person.\033[m\n");  //ï¿½ï¿½ï¿½~ï¿½Tï¿½ï¿½
         return;
-    /*2.§R«ü©w±b¥Ø*/
+    /*2.ï¿½Rï¿½ï¿½ï¿½wï¿½bï¿½ï¿½*/
     } else if (choice == '2') {
         for (cur = head, prev = NULL;
         cur != NULL;
@@ -399,7 +399,7 @@ void delete_node(char *DeleteName, int month, int day, int price, char *classes,
                 }
             }
         } 
-        printf("\033[031mERROR!!Can't find an account.\033[m\n");  //¿ù»~°T®§
+        printf("\033[031mERROR!!Can't find an account.\033[m\n");  //ï¿½ï¿½ï¿½~ï¿½Tï¿½ï¿½
         return;
     }
     return;
@@ -422,7 +422,7 @@ void traverse(void) {
 /*Search accounts by name or by month or by class, and put them in a vector searcher.*/
 std::vector<account *> search(char* name, int month, int day, char* classes){
     std::vector<account*> searcher; 
-    //Search by name(default name¡G"")
+    //Search by name(default nameï¿½G"")
     if(strcmp(name,"")!=0){ 
         account *ptr1, *ptr2;
         //Find the same name 
@@ -436,7 +436,7 @@ std::vector<account *> search(char* name, int month, int day, char* classes){
             }
         }
     }
-    //Search by date(default month¡G0/ day¡G0)
+    //Search by date(default monthï¿½G0/ dayï¿½G0)
     else if(month!=0 && day != 0){
         account *ptr1, *ptr2;
         for (ptr1 = head; ptr1 != NULL; ptr1 = ptr1->NextPerson){
@@ -447,7 +447,7 @@ std::vector<account *> search(char* name, int month, int day, char* classes){
             }
         }
     }
-    //Search by class(default class¡G"")
+    //Search by class(default classï¿½G"")
     else if(strcmp(classes,"") != 0){
         account *ptr1, *ptr2;
         for (ptr1 = head; ptr1 != NULL; ptr1 = ptr1->NextPerson){
