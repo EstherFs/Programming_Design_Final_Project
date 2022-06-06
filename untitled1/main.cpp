@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     Widget w;
-    w.setWindowTitle("Amazing Name");
+    w.setWindowTitle("Accounting With U");
     w.setWindowIcon(QIcon(":/img/icon.png"));
     w.show();
     return a.exec();
