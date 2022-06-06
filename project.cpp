@@ -29,8 +29,18 @@ void text_output(void);
 void test_PRINT(void);
 void traverse(void);
 void sortLink(void);
-void sortedPrice(account* newnode);
-void insertionPrice(void);
+void sortedPriceup(account* newnode);
+void insertionPriceup(void);
+void sortedPricedown(account* newnode);
+void insertionPricedown(void);
+void sortedDateup(account* newnode);
+void insertionDateup(void);
+void sortedDatedown(account* newnode);
+void insertionDatedown(void);
+void sortedNameup(account* newnode);
+void insertionNameup(void);
+void sortedNamedown(account* newnode);
+void insertionNamedown(void);
 void sort_traverse(void);
 void insert(void);
 void delete_choice(void);
@@ -45,20 +55,51 @@ int main(void) {
     // insert();
     int cmd;
     printf("Please inter the command (1:Delete 2:Traverse 3:Sort 4:End): ");
-    while(scanf("%d",&cmd)!=4){
+    sortLink();
+    while(scanf("%d",&cmd)){
         if(cmd==1) delete_choice();
         if(cmd==2) traverse();
-        if(cmd==3) 
+        if(cmd == 3) 
         {
-            sortLink();
-            insertionPrice();
+            insertionPriceup();
             sort_traverse();
+            sortPrice = NULL;
         }
-        if (cmd < 1 ||cmd>4){
+        if(cmd == 4) 
+        {
+            insertionPricedown();
+            sort_traverse();
+            sortPrice = NULL;
+        }
+        if(cmd == 5) 
+        {
+            insertionDateup();
+            sort_traverse();
+            sortDate = NULL;
+        }
+        if(cmd == 6) 
+        {
+            insertionDatedown();
+            sort_traverse();
+            sortDate = NULL;
+        }
+        if(cmd == 7)
+        {
+            insertionNameup();
+            sort_traverse();
+            sortName = NULL;
+        }
+        if(cmd == 8)
+        {
+            insertionNamedown();
+            sort_traverse();
+            sortName = NULL;
+        }
+        if (cmd < 1 ||cmd>9){
             printf("\033[031mERROR!!Can't execute the command.\033[m\n");
             printf("\033[032mPlease enter the cmd again.\033[m\n");
         }
-        if(cmd==4) break;
+        if(cmd==9) break;
         else printf("Please inter the command (1:Delete 2:Traverse 4:End) :");
     }
     printf("SYSTEM OFF\n");
@@ -450,9 +491,8 @@ void sortLink(void)
     }
 }
 
-void sortedPrice(account* newnode)
+void sortedPriceup(account* newnode)
 {
-    //printf("ªñ¨Ó\n");
 	if (sortPrice == NULL || sortPrice->price >= newnode->price) {
 		newnode->next = sortPrice;
 		sortPrice = newnode;
@@ -460,8 +500,7 @@ void sortedPrice(account* newnode)
 	else {
 		account* current = sortPrice;
 		
-		while (current->next != NULL
-			&& current->next->price < newnode->price) {
+		while (current->next != NULL && current->next->price < newnode->price) {
 			current = current->next;
 		}
 		newnode->next = current->next;
@@ -469,17 +508,181 @@ void sortedPrice(account* newnode)
 	}
 }
 
-void insertionPrice(void)
+void insertionPriceup(void)
 {
 	account* current = sortHead;
 
 	while (current != NULL) {
 		account* next = current->next;
-		sortedPrice(current);
+		sortedPriceup(current);
 		current = next;
 	}
 	sortHead = sortPrice;
 }
+
+void sortedPricedown(account* newnode)
+{
+	if (sortPrice == NULL || sortPrice->price <= newnode->price) {
+		newnode->next = sortPrice;
+		sortPrice = newnode;
+	}
+	else {
+		account* current = sortPrice;
+		
+		while (current->next != NULL && current->next->price > newnode->price) {
+			current = current->next;
+		}
+		newnode->next = current->next;
+		current->next = newnode;
+	}
+}
+
+void insertionPricedown(void)
+{
+	account* current = sortHead;
+
+	while (current != NULL) {
+		account* next = current->next;
+		sortedPricedown(current);
+		current = next;
+	}
+	sortHead = sortPrice;
+}
+
+void sortedDateup(account* newnode)
+{
+    if (sortDate == NULL || ((sortDate->month)*100+(sortDate->day)) >= ((newnode->month)*100+(newnode->day))) {
+		newnode->next = sortDate;
+		sortDate = newnode;
+	}
+	else {
+		account* current = sortDate;
+		
+		while (current->next != NULL && ((current->next->month)*100+(current->next->day)) < ((newnode->month)*100+(newnode->day))) {
+			current = current->next;
+		}
+		newnode->next = current->next;
+		current->next = newnode;
+	}
+}
+void insertionDateup(void)
+{
+    account* current = sortHead;
+
+	while (current != NULL) {
+		account* next = current->next;
+		sortedDateup(current);
+		current = next;
+	}
+	sortHead = sortDate;
+}
+
+
+
+void sortedDatedown(account* newnode)
+{
+    if (sortDate == NULL || ((sortDate->month)*100+(sortDate->day)) <= ((newnode->month)*100+(newnode->day))) {
+		newnode->next = sortDate;
+		sortDate = newnode;
+	}
+	else {
+		account* current = sortDate;
+		
+		while (current->next != NULL && ((current->next->month)*100+(current->next->day)) > ((newnode->month)*100+(newnode->day))) {
+			current = current->next;
+		}
+		newnode->next = current->next;
+		current->next = newnode;
+	}
+}
+void insertionDatedown(void)
+{
+    account* current = sortHead;
+
+	while (current != NULL) {
+		account* next = current->next;
+		sortedDatedown(current);
+		current = next;
+	}
+	sortHead = sortDate;
+}
+
+
+void sortedNameup(account* newnode)
+{
+    if (sortName == NULL || (strcmp(sortName -> name, newnode -> name) >= 0)) {
+		newnode->next = sortName;
+		sortName = newnode;
+	}
+	else {
+		account* current = sortName;
+		
+		while (current->next != NULL && (strcmp(current->next -> name, newnode -> name) < 0)) {
+			current = current->next;
+		}
+		newnode->next = current->next;
+		current->next = newnode;
+	}
+}
+void insertionNameup(void)
+{
+    account* current = sortHead;
+
+	while (current != NULL) {
+		account* next = current->next;
+		sortedNameup(current);
+		current = next;
+	}
+	sortHead = sortName;
+}
+
+
+
+void sortedNamedown(account* newnode)
+{
+    if (sortName == NULL || strcmp(sortName -> name, newnode -> name) <= 0) {
+		newnode->next = sortName;
+		sortName = newnode;
+	}
+	else {
+		account* current = sortName;
+		
+		while (current->next != NULL && strcmp(current->next -> name, newnode -> name) > 0) {
+			current = current->next;
+		}
+		newnode->next = current->next;
+		current->next = newnode;
+	}
+}
+void insertionNamedown(void)
+{
+    account* current = sortHead;
+
+	while (current != NULL) {
+		account* next = current->next;
+		sortedNamedown(current);
+		current = next;
+	}
+	sortHead = sortName;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void sort_traverse(void)
 {
