@@ -666,24 +666,6 @@ void insertionNamedown(void)
 	sortHead = sortName;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void sort_traverse(void)
 {
     account* current = sortHead;
