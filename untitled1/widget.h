@@ -51,6 +51,8 @@ private slots:
 
     void on_pushButton_14_clicked();
 
+    void on_pushButton_15_clicked();
+
     void on_checkBox_stateChanged(int arg1);
 
     void search_for_delete();
