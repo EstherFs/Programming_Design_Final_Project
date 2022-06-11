@@ -418,7 +418,7 @@ void Widget::on_pushButton_14_clicked()  // statistic back
     ui->stackedWidget->setCurrentIndex(0);
 }
 
-void Widget::on_pushButton_15_clicked()  // Guideline
+void Widget::on_pushButton_15_clicked()  // guidelines
 {
     QMessageBox msgBox1;
     msgBox1.setText("Please insert bills or import a CSV file.");

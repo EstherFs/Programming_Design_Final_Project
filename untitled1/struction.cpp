@@ -12,7 +12,7 @@ void import_(void);
 void export_(void);
 void insert(char *, char *, char *, int, int, int);
 int delete_node(char *, int, int, int, char *, char *, char);
-account **statistics(void);
+account **statistics(void);                                 
 account **search(char *, int, int, char *, char *, int);
 
 /*divide into month and day*/
