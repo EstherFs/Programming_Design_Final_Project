@@ -16,7 +16,8 @@ account **statistics(void);
 account **search(char *, int, int, char *, char *, int);
 
 /*divide into month and day*/
-void slice(char *strLine, char delimiter) {
+void slice(char *strLine, char delimiter) 
+{
     account *newnode = (account *)malloc(sizeof(account));
     char d[2];
     d[0] = delimiter;
@@ -64,7 +65,8 @@ void slice(char *strLine, char delimiter) {
 }
 
 /* export a CSV file */
-void export_(char *file) {
+void export_(char *file) 
+{
     FILE *fp;
     fp = fopen(file, "w");  
     account *root = head;
@@ -93,7 +95,8 @@ void export_(char *file) {
 }
 
 /* import a CSV file */
-int import_(char *file) {
+int import_(char *file) 
+{
     FILE *fp;
     fp = fopen(file, "r");  
     if (fp == NULL) {
@@ -107,7 +110,8 @@ int import_(char *file) {
     return 1;
 }
 
-void insert(char *name, char *classes, char *item, int price, int month, int day) {
+void insert(char *name, char *classes, char *item, int price, int month, int day) 
+{
     account *newnode = (account *)malloc(sizeof(account));
     newnode->name[0] = '\0';
     newnode->classes[0] = '\0';
@@ -129,7 +133,8 @@ void insert(char *name, char *classes, char *item, int price, int month, int day
 }
 
 /*add new data*/
-void add_node(account *newnode) {
+void add_node(account *newnode) 
+{
     if (head == NULL)
         head = newnode;
     else {
@@ -151,7 +156,8 @@ void add_node(account *newnode) {
 }
 
 /*delete*/
-int delete_node(char *DeleteName, int month, int day, int price, char *classes, char *item, char choice) {
+int delete_node(char *DeleteName, int month, int day, int price, char *classes, char *item, char choice) 
+{
     struct account *cur, *prev, *p, *ptr;
     // 1. delete the whole account
     if (choice == '1') {
@@ -208,7 +214,8 @@ int delete_node(char *DeleteName, int month, int day, int price, char *classes, 
 }
 
 /*Search accounts by name or by month or by class, and put them in a vector searcher.*/
-account **search(char *name, int month, int day, char *classes, char *item, int price) {
+account **search(char *name, int month, int day, char *classes, char *item, int price) 
+{
     if (total_num == 0) return NULL;
 
     account **searcher = (account **)malloc(sizeof(account *) * total_num);
@@ -329,7 +336,8 @@ account **search(char *name, int month, int day, char *classes, char *item, int 
 }
 
 /*Q-sort*/
-int cmp(const void *a, const void *b) {
+int cmp(const void *a, const void *b) 
+{
     account *A = (*(account **)a);
     account *B = (*(account **)b);
     return A->sum - B->sum;
@@ -337,7 +345,8 @@ int cmp(const void *a, const void *b) {
 
 
 /*split the expense*/
-account **statistics() {
+account **statistics() 
+{
     account *head_copy = head;
     person_num = 0;
     exceed = 0;

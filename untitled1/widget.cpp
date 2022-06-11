@@ -160,7 +160,8 @@ void Widget::on_pushButton_6_clicked()  // search data
         month = date.mid(0, idx).toInt();
         day = date.mid(idx + 1, date.size() - idx - 1).toInt();
     }
-    account **searcher = search(name.toLocal8Bit().data(), month, day, classs.toLocal8Bit().data(), item.toLocal8Bit().data(), 0);
+    account **searcher =
+        search(name.toLocal8Bit().data(), month, day, classs.toLocal8Bit().data(), item.toLocal8Bit().data(), 0);
 
     if (searcher_size == 0) {
         QMessageBox::about(this, tr("Search Error"), tr("Can't find the selected data"));
@@ -225,7 +226,8 @@ void Widget::on_pushButton_9_clicked()  // insert
     } else {
         QMessageBox::StandardButton reply;
         if (check_exist(name, classes, item, month, day, price) == true) {
-            reply = QMessageBox::question(this, "Insert Warn", "The data have already existed, do you still want to insert?",
+            reply = QMessageBox::question(this, "Insert Warn",
+                                          "The data have already existed, do you still want to insert?",
                                           QMessageBox::Yes | QMessageBox::No);
             if (reply == QMessageBox::No) return;
         }
@@ -264,7 +266,8 @@ void Widget::on_pushButton_10_clicked()  // delete account
         month = date.mid(0, idx).toInt();
         day = date.mid(idx + 1, date.size() - idx - 1).toInt();
     }
-    int status = delete_node(name.toLocal8Bit().data(), month, day, price, classes.toLocal8Bit().data(), item.toLocal8Bit().data(), '2');
+    int status = delete_node(name.toLocal8Bit().data(), month, day, price, classes.toLocal8Bit().data(),
+                             item.toLocal8Bit().data(), '2');
     if (status == 1) {
         QMessageBox msgBox;
         msgBox.setText("Deleted account sucessesfully!!");
@@ -301,7 +304,8 @@ void Widget::on_pushButton_12_clicked()  // delete person
         day = date.mid(idx + 1, date.size() - idx - 1).toInt();
     }
 
-    int status = delete_node(name.toLocal8Bit().data(), month, day, price, classes.toLocal8Bit().data(), item.toLocal8Bit().data(), '1');
+    int status = delete_node(name.toLocal8Bit().data(), month, day, price, classes.toLocal8Bit().data(),
+                             item.toLocal8Bit().data(), '1');
     if (status == 1) {
         QMessageBox msgBox;
         msgBox.setText("Deleted person sucessesfully!!");
@@ -413,29 +417,30 @@ void Widget::on_pushButton_14_clicked()  // statistic back
 {
     ui->stackedWidget->setCurrentIndex(0);
 }
+
 void Widget::on_pushButton_15_clicked()  // Guideline
 {
     QMessageBox msgBox1;
     msgBox1.setText("Please insert bills or import a CSV file.");
-    msgBox1.setWindowTitle("Guideline 1/4");
+    msgBox1.setWindowTitle("Guideline (1/4)");
     msgBox1.setStandardButtons(QMessageBox::Ok);
     msgBox1.exec();
 
     QMessageBox msgBox2;
     msgBox2.setText("Then you can choose to delete a bill or check the statistic to split the bill.");
-    msgBox2.setWindowTitle("Guideline 2/4");
+    msgBox2.setWindowTitle("Guideline (2/4)");
     msgBox2.setStandardButtons(QMessageBox::Ok);
     msgBox2.exec();
 
     QMessageBox msgBox3;
     msgBox3.setText("When you want to save the database, you should export a CSV file for next time.");
-    msgBox3.setWindowTitle("Guideline 3/4");
+    msgBox3.setWindowTitle("Guideline (3/4)");
     msgBox3.setStandardButtons(QMessageBox::Ok);
     msgBox3.exec();
-    
+
     QMessageBox msgBox4;
     msgBox4.setText("By the way, you can hide the table and change the background picture.");
-    msgBox4.setWindowTitle("Guideline 4/4");
+    msgBox4.setWindowTitle("Guideline (4/4)");
     msgBox4.setStandardButtons(QMessageBox::Ok);
     msgBox4.exec();
 }
@@ -461,7 +466,8 @@ void Widget::search_for_delete() {
         month = date.mid(0, idx).toInt();
         day = date.mid(idx + 1, date.size() - idx - 1).toInt();
     }
-    account **searcher = search(name.toLocal8Bit().data(), month, day, classes.toLocal8Bit().data(), item.toLocal8Bit().data(), price);
+    account **searcher =
+        search(name.toLocal8Bit().data(), month, day, classes.toLocal8Bit().data(), item.toLocal8Bit().data(), price);
 
     QTableWidget *table = ui->tableWidget_3;
     table->setEditTriggers(QAbstractItemView::NoEditTriggers);
