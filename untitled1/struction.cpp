@@ -190,8 +190,14 @@ int delete_node(char *DeleteName, int month, int day, int price, char *classes, 
                     if ((ptr->month == month) && (ptr->day == day) && (strcmp(ptr->classes, classes) == 0) &&
                         (strcmp(ptr->item, item) == 0) && (ptr->price == price)) {  // find the bill
                         if (ptr == cur && ptr == head) {
-                            head = cur->next;
-                            head->nextperson = cur->nextperson;
+                            if(cur->next != NULL){
+                                head = cur->next;
+                                if(head != NULL) head->nextperson = cur->nextperson;
+                            }
+                            else{
+                                head = cur->nextperson;
+                                if(head != NULL) head->nextperson = cur->nextperson->nextperson;
+                            }
                         } else if (ptr == cur && ptr != head) {
                             account *buf = cur->nextperson;
                             prev->nextperson = cur->next;
